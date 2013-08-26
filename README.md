@@ -40,17 +40,17 @@ We want to write a `/users` index page, listing all the users, and
 showing buttons to allow us to friend people.
 
 Write a simple `Friendships` controller (the only action needed is
-`create`, I think). Setup a top-level `/friendships` resource. Again,
-you'll expect the caller to post `in_friend_id`, but `out_friend_id`
-can be calculated from the current user. Redirect to `/users` when
-done. You can just `save!` here; assume there are no validation
-errors.
+`create`, I think). Nest a `friendships` resource:
+`/users/:user_id/friendship`. Your form should need neither
+`in_friend_id` nor `out_friend_id`. You can just `save!` here; assume
+there are no validation errors.
 
 Begin writing the users index. Add a button next to each user to allow
 us to friend a user. To do this, write a brief form posting to
-`/friendships`. You should only need to post one hidden field (which
-one?). Put this in a partial `friendships/_form.html.erb`. Pass in the
-appropriate `user` local variable.
+`/users/:user_id/friendship`. You should not need to post either
+`in_friend_id` nor `out_friend_id`. Put this in a partial
+`friendships/_form.html.erb`. Pass in the appropriate `user` local
+variable.
 
 Okay. Not everyone should get a friend button. Here's people we can't
 friend:
@@ -100,11 +100,25 @@ while in the midst of of friending. You can test this out by adding a
 
 ## Phase IV: Remove friendships
 
-All things must end; you grow apart. You're still proud of your
-friend, but you don't stay in touch anymore.
+Oh no. Your social ineptitude has destroyed another friendship. There
+is nothing left to do but ignominiously de-friend them.
 
 Add a second button, to unfriend a user. You'll need a `destroy`
-action on `FriendshipsController`.
+action on `FriendshipsController`. Write a `Friendship::can_unfriend`
+method. Show the button if this is true. Again, attach a click handler
+that will remove the friendship.
+
+We'll worry about toggling the friend/unfriend buttons in a
+second. For now just remove the unfriend button.
+
+If you try to issue a `redirect_to` in response to an AJAX request,
+the request will probably fail. Since all our requests to
+`FriendshipsController` are through AJAX now, you can more easily
+indicate success without returning any data with `head :ok`
+(alternatively you could give the status code number: `head
+200`). This issues just a blank response.
+
+### Toggling
 
 You now want the unfriend button to appear when you are friends, and
 the friend button to appear when you are not. The cleanest way to do
