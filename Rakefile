@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-NewAuthDemo::Application.load_tasks
+SecretShareAjax::Application.load_tasks
