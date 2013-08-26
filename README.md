@@ -32,17 +32,41 @@ user page on successful secret completion.
 
 ## Phase II: Add friendships
 
-Write a `Friendship` model to join `User` to `User`. Friendship is
-one-way in this application; I used `out_friend` and `in_friend` as
-associations.
+Write a `Friendship` model to join `User` to `User`. For simplicity,
+let's make friendship one-way. I used `out_friend_id`/`in_friend_id`
+columns and `out_friend`/`in_friend` associations. Add appropriate
+indices, as ever. What presence/uniqueness validation should you add?
+Add DB constraints.
+
+We want to write a `/users` index page, listing all the users, and
+showing buttons to allow us to friend people.
 
 Write a simple `Friendships` controller (the only action needed is
-`create`, I think). Setup a top-level `friendships` resource. Again,
-you'll want to post `in_friend_id`, but `out_friend_id` can be
-calculated from the current user.
+`create`, I think). Setup a top-level `/friendships` resource. Again,
+you'll expect the caller to post `in_friend_id`, but `out_friend_id`
+can be calculated from the current user. Redirect to `/users` when
+done. You can just `save!` here; assume there are no validation
+errors.
 
-Add a `/users` index page, list all users, and add a "Friend" button
-for each.
+Begin writing the users index. Add a button next to each user to allow
+us to friend a user. To do this, write a brief form posting to
+`/friendships`. You should only need to post one hidden field (which
+one?). Put this in a partial `friendships/_form.html.erb`. Pass in the
+appropriate `user` local variable.
+
+Okay. Not everyone should get a friend button. Here's people we can't
+friend:
+
+* Anyone we have friended in the past.
+* Ourself.
+
+Write a `Friendship::can_friend?(out_friend_id, in_friend_id)`
+helper. Use ActiveRecord's `exists?` method.
+
+Make sure things are working. You should be able to click to friend
+"Gizmo" and after the page refresh, the button should disappear.
+
+## Phase III: Remote friendships
 
 Make the form a "remote" form: submit it via AJAX.
 
@@ -55,7 +79,7 @@ show "Friending...".
 When the template is first rendered, appropriately grey-out the button
 if a user has already been friended.
 
-## Phase III: Remove friendships
+## Phase IV: Remove friendships
 
 All things must end; you grow apart. You're still proud of your
 friend, but you don't stay in touch anymore.
