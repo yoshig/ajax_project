@@ -109,7 +109,8 @@ method. Show the button if this is true. Again, attach a click handler
 that will remove the friendship.
 
 We'll worry about toggling the friend/unfriend buttons in a
-second. For now just remove the unfriend button.
+second. For now just remove the unfriend button on success; there
+should be no buttons left.
 
 If you try to issue a `redirect_to` in response to an AJAX request,
 the request will probably fail. Since all our requests to
@@ -124,17 +125,23 @@ You now want the unfriend button to appear when you are friends, and
 the friend button to appear when you are not. The cleanest way to do
 this is to:
 
-0. Write both buttons (and forms), display them both.
+0. Write both buttons, display them both.
 0. Place the two buttons in a div or span, give this a CSS class of
-   `friend_buttons`. Likewise, give your buttons classes of `friend`
-   and `unfriend`.
+   `friend-buttons`. Likewise, give your buttons classes of `friend`
+   and `unfriend` (they already have these, I should hope!).
 0. If we are friends, set a second class on your div:
-   `friended`. Otherwise, set `unfriended` as the class.
-0. Write a CSS rule so that `.friend_buttons.friended friend` is
-   `display: none`. Do likewise for `.friend_buttons.unfriended
-   unfriend`.
-0. Lastly, when either button is pressed, swap the class of of the div
-   (see `$.toggleClass`).
+   `can-unfriend`. Otherwise, set `can-friend` as the class.
+0. Write a CSS rule so that `span.friend-buttons.can-unfriend button.friend`
+   is `display: none`. Do likewise for `span.friend-buttons.can-friend
+   button.unfriend`.
+0. Lastly, when either button is pressed, in the success callback swap
+   the class of of the `friend-buttons`'s div/span (see
+   `$.toggleClass`).
+     * I wrote this in a JS helper function, `toggleFriendButtons`. I
+       used this for both callbacks.
+
+To keep things easy, you can remove the logic that greys out and
+disables buttons.
 
 ## Interlude: RESTful design and nested resources
 
