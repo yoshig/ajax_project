@@ -11,7 +11,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130814223245) do
+ActiveRecord::Schema.define(:version => 20130826014054) do
+
+  create_table "secrets", :force => true do |t|
+    t.string   "title",        :null => false
+    t.integer  "author_id",    :null => false
+    t.integer  "recipient_id", :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "secrets", ["author_id"], :name => "index_secrets_on_author_id"
+  add_index "secrets", ["recipient_id"], :name => "index_secrets_on_recipient_id"
 
   create_table "users", :force => true do |t|
     t.string   "username",        :null => false

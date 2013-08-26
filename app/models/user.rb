@@ -2,6 +2,18 @@ class User < ActiveRecord::Base
   attr_accessible :username, :password
   attr_reader :password
 
+  has_many(
+    :authored_secrets,
+    :class_name => "Secret",
+    :foreign_key => :author_id
+  )
+
+  has_many(
+    :received_secrets,
+    :class_name => "Secret",
+    :foreign_key => :recipient_id
+  )
+
   validates :password_digest, :presence => { :message => "Password can't be blank" }
   validates :password, :length => { :minimum => 6, :allow_nil => true }
   validates :session_token, :presence => true

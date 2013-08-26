@@ -1,6 +1,6 @@
 development:
   adapter: postgresql
-  database: new_auth_demo_dev
+  database: secret_share_ajax_dev
   host: localhost
   pool: 5
   timeout: 5000
