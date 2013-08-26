@@ -143,7 +143,7 @@ this is to:
 To keep things easy, you can remove the logic that greys out and
 disables buttons.
 
-## Interlude: RESTful design and nested resources
+### Interlude: RESTful design and nested resources
 
 Notice how the friend/unfriend action has been written in terms of a
 nested `friendship` resource. This is a common pattern: take a verb
@@ -154,14 +154,17 @@ designs.
 ## Phase V: Remote secrets form
 
 We have a `/users/123/secrets/new` page that displays a form. I'd like
-to be able to post a new secret directly from the `/users/123` page.
+to be able to post a new secret directly from the `/users/123`
+page. Move the `secrets/new.html.erb` template into a partial (perhaps
+`_form.html.erb`). Render the partial on the users show page.
 
-Move the `new.html.erb` template into a partial (perhaps
-`_form.html.erb`). Use AJAX to make the form remote. Render the
-partial in `users/show.html.erb` page.
+Next, write some JavaScript code in the users show page to submit the
+form via AJAX. You'll want to use `serializeJSON`. Besides maybe
+adding a CSS class to help select the form, you won't have to change
+the form partial.
 
 On successful submission, add the new secret to the `ul` listing all
-the secrets. Clear the form so the user can submit more secrets! :-)
+the secrets. Clear the form so the user can submit more secrets!
 
 ## Phase VI: Simple dynamic form (no nesting)
 
