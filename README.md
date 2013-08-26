@@ -1,7 +1,5 @@
 # First Ajax Project
 
-**TODO**: use data-id to avoid many callbacks.
-
 This project is a simple secret sharing project. I've written two
 models: `User` and `Secret`. I've also built `UsersController` and
 `SessionsController` to do login for you (I just stole them from
@@ -68,16 +66,37 @@ Make sure things are working. You should be able to click to friend
 
 ## Phase III: Remote friendships
 
-Make the form a "remote" form: submit it via AJAX.
+Okay, you've got it working nice. Now, let's toss away your form (oh
+no!). We're going to make this a remote form using AJAX.
 
-When clicked, change the button text to "Friending..." and disable the
-submit button. When the request succeeds, change the text to
-"Friended". Test this out by adding a `sleep(2)` to your
-`FriendshipsController#create` action. For two seconds, you should
-show "Friending...".
+Instead of rendering the form partial, just add lone `button`
+element. The button doesn't need to live within a form. Give the
+button a class like `friend`.
 
-When the template is first rendered, appropriately grey-out the button
-if a user has already been friended.
+Okay, let's write some JavaScript! Let's be bad and put it in an
+inline script tag in our `users/index.html.erb` view.
+
+Attach a click handler to the buttons within the list of users. No
+matter how many users you have, you should only need to define one
+handler and install it once. Use jQuery's event delegation to do
+this. In particular, you'll need to use a `data-*` attribute on the
+button: what data will you need? How will you gain access to the data
+attribute in the event handler?
+
+For now, just pop-up an alert when the button is clicked. Check that
+this is working.
+
+Okay! Last step! Instead of just popping up an alert, use `$.ajax` to
+make a POST request and construct a `Friendship`. You'll be glad to
+have that `id` now, won't you? :-)
+
+You'll want a success callback; go ahead and `remove` the button when
+done.
+
+One last thing before you move on. Please disable the button (lookup
+on MDN/jQuery how to do this), changing the text to "Friending...",
+while in the midst of of friending. You can test this out by adding a
+`sleep(2)` to your `FriendshipsController#create` action.
 
 ## Phase IV: Remove friendships
 
@@ -111,7 +130,7 @@ action, think of the noun that might be created by that action, and
 nest that as a resource. This is one of the secrets to nice, RESTful
 designs.
 
-## Phase IV: Remote secrets form
+## Phase V: Remote secrets form
 
 We have a `/users/123/secrets/new` page that displays a form. I'd like
 to be able to post a new secret directly from the `/users/123` page.
@@ -123,7 +142,7 @@ partial in `users/show.html.erb` page.
 On successful submission, add the new secret to the `ul` listing all
 the secrets. Clear the form so the user can submit more secrets! :-)
 
-## Phase V: Simple dynamic form (no nesting)
+## Phase VI: Simple dynamic form (no nesting)
 
 Let's allow users to tag secrets when they create them. Add `Tag` and
 `SecretTagging` models. Set up appropriate associations.
