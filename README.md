@@ -4,15 +4,18 @@
 
 This project is a simple secret sharing project. I've written two
 models: `User` and `Secret`. I've also built `UsersController` and
-`SessionsController` to do login for you.
+`SessionsController` to do login for you (I just stole them from
+the NewAuthDemo you've read before).
 
 ## Phase I: secrets form
 
 Write a plain-old (non-AJAX) `/users/123/secrets/new` form. You'll
-need to create a nested route. Restrict to a `new` action. Make a
-top-level `/secrets` resource, too. We'll have our nested `new` form
-post to the top-level `/secrets` route (it's preferred to POST to a
-top-level route). You can restrict the top-level `secrets` route to
+need to create a nested route and controller. Restrict to a `new`
+action.
+
+Make a top-level `/secrets` resource, too. We'll have our nested `new`
+form post to the top-level `/secrets` route (it's preferred to POST to
+a top-level route). You can restrict the top-level `secrets` route to
 `create`.
 
 Write the form to post a secret. When you post a secret, you are
@@ -20,11 +23,12 @@ sharing it to someone's 'wall'. The form at `/users/123/secrets/new`
 should post a secret to recipient `123`. Hints:
 
 * You'll need to upload the recipient's `user_id`.
-* You should not need to upload the sender's id. Modify the
-  `SecretsController#create` to use the `current_user`'s id.
+* You should not need to upload the sender's id. In
+  `SecretsController#create` use the `current_user`'s id.
 
 You can look at a user's page to view the secrets they have been
-shared and make sure things are working.
+shared and make sure things are working. Redirect to the recipient's
+user page on successful secret completion.
 
 ## Phase II: Add friendships
 
