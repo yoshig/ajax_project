@@ -169,18 +169,25 @@ the secrets. Clear the form so the user can submit more secrets!
 ## Phase VI: Simple dynamic form (no nesting)
 
 Let's allow users to tag secrets when they create them. Add `Tag` and
-`SecretTagging` models. Set up appropriate associations.
+`SecretTagging` models. Set up appropriate associations. As ever, add
+appropriate validations/DB constraints. Add indices. Setup appropriate
+associations.
 
 Because `Secret` `has_many :tags, :through => :secret_taggings`, we
 can use `Secret#tag_ids=`. We saw how to tag a secret with many tags
 through a set of checkboxes. But what if there are lots of tags to
 choose from? Do we really want to present 100 checkboxes?
 
-Instead, let's present a single `select` tag. Let's also present a
-link "Add another tag". Clicking this link should invoke a JS function
-that will add another `select` tag.
+Instead, we'll present a single `select` tag for tags plus an "add
+another tag" link. Clicking this link will invoke a JS function to add
+another `select` tag.
 
 ### JSON data script trick
+
+**TODO**: review from here on.
+
+Our JavaScript code needs to know what the tags are. Let's bootstrap
+this data into the view.
 
 Creating new `select` tags means you'll have to create `option` tags:
 one for each `Tag`. To give your JavaScript code access to the list of
