@@ -178,30 +178,53 @@ can use `Secret#tag_ids=`. We saw how to tag a secret with many tags
 through a set of checkboxes. But what if there are lots of tags to
 choose from? Do we really want to present 100 checkboxes?
 
-Instead, we'll present a single `select` tag for tags plus an "add
+Instead, we'll present a single `select` element for tags plus an "add
 another tag" link. Clicking this link will invoke a JS function to add
-another `select` tag.
+another `select` tag element dynamically to the form.
 
-### JSON data script trick
+Let's begin modifying our `Secret` form partial.
 
-**TODO**: review from here on.
+### Bootstrap the `Tag`s
 
-Our JavaScript code needs to know what the tags are. Let's bootstrap
-this data into the view.
+Let's start by bootstrapping the existing `Tag` choices into the
+view. We need to do this because when we generate the `select`
+element, the JavaScript code will need to know what `Tag`s should be
+presented in the dropdown.
 
-Creating new `select` tags means you'll have to create `option` tags:
-one for each `Tag`. To give your JavaScript code access to the list of
-`Tag`s, I'd store the JSONified `Tag`s in an HTML script tag. Check
-out the [bootstrapping data][bootstrapping-data] chapter for hints.
+Use the bootstrapping trick. Use a `script` tag with
+`type="application/json"`. Next, write a true inline-script
+(`type="application/javascript"`) that finds the `script` element with
+bootstrapped data, extracts its contents, and parses the
+JSON. `console.log` the data to make sure this is working.
 
-[bootstrapping-data]: https://github.com/appacademy/js-curriculum/blob/master/client-side-js/bootstrapping-data.md
-
-### Underscore template trick
+### Write an Underscore template
 
 When the user clicks the "Add another tag" link, we need to insert
 another select box into the form. Since this involves building HTML to
-inject into the form, we can use an underscore template. Recall how to
-do this by referring to the
-[underscore templates][underscore-templates] reading.
+inject into the form, we can use an Underscore template.
 
-[underscore-templates]: https://github.com/appacademy/js-curriculum/blob/master/client-side-js/underscore-templates.md
+Write yet another `script` element; give it
+`type="text/template"`. Write an Underscore template that generates a
+`select` tag, and then iterates through some `tags`, creating `option`
+tags for each.
+
+Write a helper function, `addSecretTagSelect`. This funciton should
+find the template, extract its contents, compile the template function
+(`_.template`) and render the function. It should pass in the
+bootstrapped tags to the template function, so that all the `Tag`s are
+presented as choices.
+
+Add a `div` with `id="secret-tag-selects"` to the `Secret` form. Your
+`addSecretTagSelect` should append the rendered template result into
+this div.
+
+Try it out! Call `addSecretTagSelect` once to present a single drop
+down.
+
+### Adding more selects
+
+Add a fake link after your `secret-tag-selects` div (set the
+`href="#"`). Install a click handler listening for the link. Prevent
+the usual navigation event; instead, call `addSecretTagSelect`.
+
+Profit.
