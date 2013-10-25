@@ -24,9 +24,10 @@ should post a secret to recipient `123`. Hints:
 * You should not need to upload the sender's id. In
   `SecretsController#create` use the `current_user`'s id.
 
-You can look at a user's page to view the secrets they have been
-shared and make sure things are working. Redirect to the recipient's
-user page on successful secret completion.
+You can look at a user's page to view the secrets that have been shared
+with them (like a facebook wall--yeah, so they're not that "secret"). 
+Make sure things are working. Redirect to the recipient's user page on
+successful secret completion.
 
 ## Phase II: Add friendships
 
