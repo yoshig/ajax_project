@@ -25,7 +25,7 @@ should post a secret to recipient `123`. Hints:
   `SecretsController#create` use the `current_user`'s id.
 
 You can look at a user's page to view the secrets that have been shared
-with them (like a facebook wall--yeah, so they're not that "secret"). 
+with them (like a facebook wall--they're not that "secret"). 
 Make sure things are working. Redirect to the recipient's user page on
 successful secret completion.
 
