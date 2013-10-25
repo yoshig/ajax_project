@@ -171,8 +171,7 @@ the secrets. Clear the form so the user can submit more secrets!
 
 Let's allow users to tag secrets when they create them. Add `Tag` and
 `SecretTagging` models. Set up appropriate associations. As ever, add
-appropriate validations/DB constraints. Add indices. Setup appropriate
-associations.
+appropriate validations/DB constraints. Add indices. 
 
 Because `Secret` `has_many :tags, :through => :secret_taggings`, we
 can use `Secret#tag_ids=`. We saw how to tag a secret with many tags
