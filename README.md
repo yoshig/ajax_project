@@ -42,13 +42,13 @@ showing buttons to allow us to friend people.
 
 Write a simple `Friendships` controller (the only action needed is
 `create`, I think). Nest a `friendships` resource:
-`/users/:user_id/friendship`. Your form should need neither
+`/users/:user_id/friendships`. Your form should need neither
 `in_friend_id` nor `out_friend_id`. You can just `save!` here; assume
 there are no validation errors.
 
 Begin writing the users index. Add a button next to each user to allow
 us to friend a user. To do this, write a brief form posting to
-`/users/:user_id/friendship`. You should not need to post either
+`/users/:user_id/friendships`. You should not need to post either
 `in_friend_id` nor `out_friend_id`. Put this in a partial
 `friendships/_form.html.erb`. Pass in the appropriate `user` local
 variable.
