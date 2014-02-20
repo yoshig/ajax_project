@@ -70,7 +70,7 @@ Make sure things are working. You should be able to click to friend
 Okay, you've got it working nice. Now, let's toss away your form (oh
 no!). We're going to make this a remote form using AJAX.
 
-Instead of rendering the form partial, just add lone `button`
+Instead of rendering the form partial, just add a lone `button`
 element. The button doesn't need to live within a form. Give the
 button a class like `friend`.
 
