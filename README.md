@@ -72,10 +72,11 @@ no!). We're going to make this a remote form using AJAX.
 
 Instead of rendering the form partial, just add a lone `button`
 element. The button doesn't need to live within a form. Give the
-button a class like `friend`.
+button the class `friend`.
 
 Okay, let's write some JavaScript! Let's be bad and put it in an
-inline script tag in our `users/index.html.erb` view.
+inline script tag in our `users/index.html.erb` view. For anything
+more serious we would always put it in its own `.js` file.
 
 Attach a click handler to the buttons within the list of users. No
 matter how many users you have, you should only need to define one
@@ -94,10 +95,15 @@ have that `id` now, won't you? :-)
 You'll want a success callback; go ahead and `remove` the button when
 done.
 
+Is that success callback being called? No? What is your `create` 
+method doing upon success? If it is redirecting, you got problems.
+All it needs to do is `head :ok`.
+
 One last thing before you move on. Please disable the button (lookup
 on MDN/jQuery how to do this), changing the text to "Friending...",
 while in the midst of of friending. You can test this out by adding a
-`sleep(2)` to your `FriendshipsController#create` action.
+`sleep(2)` to your `FriendshipsController#create` action. This will
+simulate a very slow server response.
 
 ## Phase IV: Remove friendships
 
@@ -114,7 +120,7 @@ second. For now just remove the unfriend button on success; there
 should be no buttons left.
 
 If you try to issue a `redirect_to` in response to an AJAX request,
-the request will probably fail. Since all our requests to
+the request will certainly fail. Since all our requests to
 `FriendshipsController` are through AJAX now, you can more easily
 indicate success without returning any data with `head :ok`
 (alternatively you could give the status code number: `head
