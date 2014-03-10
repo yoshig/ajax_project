@@ -24,6 +24,12 @@ class UsersController < ApplicationController
     end
 
     @user = User.find(params[:id])
+    @secret = Secret.new
+    @tags = Tag.all
+  end
+
+  def index
+    @users = User.all
   end
 
   private

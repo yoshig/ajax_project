@@ -1,8 +1,83 @@
 <h1><%= @user.username %></h1>
 
+<h2>Post a Secret</h2>
+
+
+<div id="form-container"></div>
+
+<a href="#" class="add-secret-tag">Add Another Tag</a>
+
+<script type="text/template" id="form-template">
+  <%= render "secrets/form", secret: @secret, recipient: @user, tags: @tags %>
+</script>
+
 <h2>Secrets</h2>
-<ul>
+<ul id='secrets-list'>
   <% @user.received_secrets.each do |secret| %>
-    <li><%= secret.title %></li>
+    <li>
+      <%= secret.title %> |
+      <% secret.tags.each do |tag| %>
+        <%= tag.name %>
+      <% end %>
+    </li>
   <% end %>
 </ul>
+
+<%= link_to "Back to all users", users_url %>
+
+<script id="supah_tags" type="application/json">
+  { "tags": <%= @tags.to_json.html_safe %> }
+</script>
+
+<script type="template/underscore" id="tag-options">
+  <select name="secret[tag_ids][]">
+    <option></option>
+    <%% _(tags).each(function (tag) { %>
+      <option value="<%%= tag.id %>"><%%= tag.name %></option>
+    <%% }); %>
+  </select>
+</script>
+
+<script>
+
+  $(function() {
+    $('.add-secret-tag').on('click', function(event) {
+      event.preventDefault();
+      debugger
+      var data = JSON.parse($("#supah_tags").html());
+
+      var template = $("#tag-options").html();
+      var templateFn = _.template(template);
+      var renderedContent = templateFn(data);
+      $(".secret-tag-selects").append(renderedContent);
+    });
+
+    var template = _.template($('#form-template').html());
+    $('#form-container').html(template);
+
+    var addSecret = function(secret) {
+      $('ul#secrets-list:first').prepend('<li>' + secret.title + '</li>');
+    };
+
+    var submitHandler = function() {
+      $('#new-secret').on('submit', function(event) {
+        event.preventDefault(); // prevent browser from handling the request
+        var $form = $(this);
+        var data = $form.serialize();
+        $.ajax({
+          url: $form.attr('action'),
+          type: 'POST',
+          data: data,
+          success: function (secret) {
+            addSecret(secret);
+            $('#title').val("");
+          },
+          error: function() {
+            alert(arguments);
+          }
+        })
+      })
+    };
+    submitHandler();
+  });
+</script>

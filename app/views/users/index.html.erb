@@ -1,0 +1,62 @@
+<% @current_id = -1 unless @current_id = current_user %>
+<!-- cut down on n+1 queries -->
+
+<h1>All the people</h1>
+
+<ul>
+  <% @users.each do |user| %>
+    <li><%= link_to user.username, user_url(user) %>
+      <% if Friendship.can_friend?(user.id, @current_id) %>
+        <div class="friend-buttons can-friend" data-test="1">
+      <% elsif Friendship.can_unfriend?(user.id, @current_id) %>
+        <div class="friend-buttons can-unfriend">
+      <% else %>
+        <div class="friend-buttons self">
+      <% end %>
+        <button class="friend"
+                data-userid="<%= user.id %>">
+          New Friend
+        </button>
+      <% friendship = Friendship.find_by(in_friend_id: @current_id,
+                                         out_friend_id: user.id) %>
+      <% friendship = friendship ? friendship.id : -1 %>
+        <button class="unfriend"
+                data-userid="<%= user.id %>"
+                data-friendshipid="<%= friendship %>">
+          Unfriend
+        </button>
+      </div>
+    </li>
+  <% end %>
+</ul>
+
+<script>
+  $(function() {
+
+    $('button').on("click", function(event) {
+      var $friendButton = $(event.target);
+      if ($friendButton.attr('class') === 'friend') {
+          var userurl = "/users/" +
+                         $friendButton.data("userid") +
+                         "/friendships";
+          var action = 'POST';
+      } else {
+        var userurl = "/users/" + $friendButton.data("userid") +
+                       "/friendships/" + $friendButton.data("friendshipid");
+        var action = 'DELETE';
+      }
+
+      $.ajax({
+        url: userurl,
+        type: action,
+        success: function() {
+          $friendButton.parent().toggleClass("can-friend can-unfriend");
+          // $friendButton.remove();
+        },
+        error: function () {
+          alert(arguments);
+        }
+      })
+    });
+  });
+</script>
